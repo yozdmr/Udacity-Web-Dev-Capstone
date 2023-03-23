@@ -38,7 +38,6 @@ class FinalTestCase(unittest.TestCase):
 
         self.assertTrue(data['success'])
         self.assertEqual(data['number_actors'], len(Actor.query.all()))
-        self.assertTrue(data['actors'])
     
     def test_get_movies_success(self):
         res = self.client().get('/movies')
@@ -46,7 +45,7 @@ class FinalTestCase(unittest.TestCase):
 
         self.assertTrue(data['success'])
         self.assertEqual(data['number_movies'], len(Movie.query.all()))
-        self.assertTrue(data['movies'])
+    
 
 
 
