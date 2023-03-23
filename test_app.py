@@ -26,6 +26,12 @@ class FinalTestCase(unittest.TestCase):
     def tearDown(self):
         pass
 
+    '''
+    Currently all successful endpoint tests are done.
+    TODO: One test for error behavior of each endpoint
+    TODO: At least two tests of RBAC for each role
+    '''
+
     def test_index(self):
         res = self.client().get('/')
         data = json.loads(res.data)

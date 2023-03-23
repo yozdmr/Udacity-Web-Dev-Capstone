@@ -2,6 +2,7 @@ import os
 from flask import Flask, request, abort, jsonify
 from flask_cors import CORS
 from models import setup_db, Actor, Movie
+from auth import requires_auth
 
 # create and configure the app
 def create_app(test_config=None):
@@ -16,7 +17,8 @@ def create_app(test_config=None):
         response.headers.add('Access-Control-Allow-Headers', 'GET, POST, PATCH, DELETE, OPTIONS')
         return response
 
-
+    # NOTE: Auth permissions below
+    # get/post/patch/delete  :  actor/movie
 
 
     # ------------------------------
@@ -35,6 +37,7 @@ def create_app(test_config=None):
 
     # Gets all of the actors
     @app.route('/actors', methods=['GET'])
+    @requires_auth('get:actor')
     def get_actors():
         actors = Actor.query.all()
         if actors != None:
@@ -51,6 +54,7 @@ def create_app(test_config=None):
 
     # Gets all of the movies
     @app.route('/movies', methods=['GET'])
+    @requires_auth('get:movie')
     def get_movies():
         movies = Movie.query.all()
         if movies != None:
@@ -66,6 +70,7 @@ def create_app(test_config=None):
 
     # Gets actor by provided ID
     @app.route('/actors/<int:id>', methods=['GET'])
+    @requires_auth('get:actor')
     def get_actor(id):
         actor = Actor.query.filter_by(id=id).one_or_none()
         if actor != None and Actor.query.all() != None:
@@ -79,6 +84,7 @@ def create_app(test_config=None):
 
     # Gets movie by provided ID
     @app.route('/movies/<int:id>', methods=['GET'])
+    @requires_auth('get:movie')
     def get_movie(id):
         movie = Movie.query.filter_by(id=id).one_or_none()
         if movie != None and Movie.query.all() != None:
@@ -96,6 +102,7 @@ def create_app(test_config=None):
 
     # Posts actor
     @app.route('/actors', methods=['POST'])
+    @requires_auth('post:actor')
     def post_actor():
         data = request.get_json()
         
@@ -113,6 +120,7 @@ def create_app(test_config=None):
 
     # Posts movie
     @app.route('/movies', methods=['POST'])
+    @requires_auth('post:movie')
     def post_movie():
         data = request.get_json()
         
@@ -132,6 +140,7 @@ def create_app(test_config=None):
 
     # Patches actor
     @app.route('/actors/<int:id>', methods=['PATCH'])
+    @requires_auth('patch:actor')
     def patch_actor(id: int):
         data = request.get_json()
         
@@ -151,6 +160,7 @@ def create_app(test_config=None):
 
     # Patches movie
     @app.route('/movies/<int:id>', methods=['PATCH'])
+    @requires_auth('patch:movie')
     def patch_movie(id: int):
         data = request.get_json()
         
@@ -173,6 +183,7 @@ def create_app(test_config=None):
 
     # Deletes actor based on given ID
     @app.route('/actor/<int:id>', methods=['DELETE'])
+    @requires_auth('delete:actor')
     def delete_actor(id):
         actor = Actor.query.filter_by(id=id)
         formatted_actor = actor.format()
@@ -185,6 +196,7 @@ def create_app(test_config=None):
 
     # Deletes movie based on given ID
     @app.route('/movie/<int:id>', methods=['DELETE'])
+    @requires_auth('delete:movie')
     def delete_movie(id):
         movie = Movie.query.filter_by(id=id)
         formatted_movie = movie.format()
