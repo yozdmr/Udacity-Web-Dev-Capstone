@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 import json
 from dotenv import load_dotenv
 
-load_dotenv(dotenv_path='db_info.env')
+load_dotenv(dotenv_path='dbinfo.env')
 database_name = os.getenv('DATABASE_NAME')
 database_user = os.getenv('DATABASE_USER')
 database_password = os.getenv('DATABASE_PASSWORD')
@@ -61,7 +61,7 @@ class Actor(db.Model):
     
     def __init__(self, name, age, gender):
         self.name = name
-        self.nane = age
+        self.age = age
         self.gender = gender
 
     def insert(self):
