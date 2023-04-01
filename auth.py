@@ -1,4 +1,4 @@
-from flask import Flask, request, abort
+from flask import Flask, request, abort, jsonify
 import json
 from functools import wraps
 from jose import jwt
@@ -22,45 +22,27 @@ class AuthError(Exception):
 def get_token_auth_header():
     auth = request.headers.get('Authorization', None)
     if not auth:
-        raise AuthError({
-            'code': 'authorization_header_missing',
-            'description': 'Authorization header is expected.'
-        }, 401)
+        abort(401, "Authorization header is expected.")
     
     parts = auth.split()
     if parts[0].lower() != 'bearer':
-        raise AuthError({
-            'code': 'invalid_header',
-            'description': 'Authorization header must start with "Bearer".'
-        }, 401)
+        abort(401, 'Authorization header must start with "Bearer".')
     
     elif len(parts) == 1:
-        raise AuthError({
-            'code': 'invalid_header',
-            'description': 'Token not found.'
-        }, 401)
+        abort(401, "Token not found.")
 
     elif len(parts) > 2:
-        raise AuthError({
-            'code': 'invalid_header',
-            'description': 'Authorization header must be bearer token.'
-        }, 401)
+        abort(401, "Authorization header must be bearer token.")
 
     token = parts[1]
     return token
 
 def check_permissions(permission, payload):
     if 'permissions' not in payload:
-        raise AuthError({
-            'code': 'header_missing_permission',
-            'description': 'Authorization header is missing permission information.'
-        }, 400)
+        abort(400, "Authorization header is missing permission information.")
 
     if permission not in payload['permissions']:
-        raise AuthError({
-            'code': 'missing_necessary_permission',
-            'description': 'Authorization header is missing a required permission.'
-        }, 403)
+        abort(403, "Authorization header is missing a required permission.")
     
     return True
 
@@ -70,10 +52,7 @@ def verify_decode_jwt(token):
     unverified_header = jwt.get_unverified_header(token)
     rsa_key = {}
     if 'kid' not in unverified_header:
-        raise AuthError({
-            'code': 'invalid_header',
-            'description': 'Authorization malformed.'
-        }, 401)
+        abort("Authorization malformed.")
 
     for key in jwks['keys']:
         if key['kid'] == unverified_header['kid']:
@@ -97,25 +76,15 @@ def verify_decode_jwt(token):
             return payload
 
         except jwt.ExpiredSignatureError:
-            raise AuthError({
-                'code': 'token_expired',
-                'description': 'Token expired.'
-            }, 401)
+            abort(401, "Token expired.")
 
         except jwt.JWTClaimsError:
-            raise AuthError({
-                'code': 'invalid_claims',
-                'description': 'Incorrect claims. Please, check the audience and issuer.'
-            }, 401)
+            abort(401, "Incorrect claims. Please, check the audience and issuer.")
+
         except Exception:
-            raise AuthError({
-                'code': 'invalid_header',
-                'description': 'Unable to parse authentication token.'
-            }, 400)
-    raise AuthError({
-                'code': 'invalid_header',
-                'description': 'Unable to find the appropriate key.'
-            }, 400)
+            abort(400, "Unable to parse authentication token.")
+            
+    abort(400, "Unable to find the appropriate key.")
 
 
 def requires_auth(permission=''):
@@ -129,3 +98,31 @@ def requires_auth(permission=''):
 
         return wrapper
     return requires_auth_decorator
+
+
+# ------------------------------
+# Error handlers
+# ------------------------------
+@app.errorhandler(400)
+def autherror_400(error, message: str):
+    return jsonify({
+        "success": False,
+        'error': 400,
+        "message": message
+    }), 400
+
+@app.errorhandler(401)
+def autherror_401(error, message: str):
+    return jsonify({
+        "success": False,
+        'error': 404,
+        "message": message
+    }), 401
+
+@app.errorhandler(403)
+def autherror_403(error, message: str):
+    return jsonify({
+        "success": False,
+        'error': 403,
+        "message": message
+    }), 403
