@@ -4,12 +4,15 @@ from functools import wraps
 from jose import jwt
 from urllib.request import urlopen
 
+import os
+from dotenv import load_dotenv
 
 app = Flask(__name__)
 
-AUTH0_DOMAIN = 'yozdmr.us.auth0.com'
+load_dotenv(dotenv_path='authinfo.env')
+AUTH0_DOMAIN = os.getenv('AUTH0_DOMAIN')  # EX: example.us.auth0.com
 ALGORITHMS = ['RS256']
-API_AUDIENCE = 'final'
+API_AUDIENCE = os.getenv('API_AUDIENCE')
 
 
 class AuthError(Exception):

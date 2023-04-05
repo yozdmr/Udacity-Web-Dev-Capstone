@@ -1,4 +1,5 @@
 dbinfo.env
+authinfo.env
 
 venv
 __pycache__
