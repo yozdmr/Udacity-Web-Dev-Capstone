@@ -92,7 +92,7 @@ Sample response:
 ~~~
 
 
-### GET '/actors/<<int:id>>'
+### GET '/actors/<int:id>'
 Permission required: `get:actor`
 - Displays the actor with the specified ID
 - Request arguments: ID (in the route)
@@ -113,7 +113,7 @@ Sample response:
 ~~~
 
 
-### GET '/movies/<<int:id>>'
+### GET '/movies/<int:id>'
 Permission required: `get:movie`
 - Displays the movie with the specified ID
 - Request arguments: ID (in the route)
@@ -170,7 +170,7 @@ Sample response:
 }
 ~~~
 
-### PATCH '/actors/<<int:id>>'
+### PATCH '/actors/<int:id>'
 Permission required: `patch:actor`
 - Updates an actor in the database
 - Request arguments: ID (in the route), and A JSON object with at least one of the attributes "name", "age" and "gender". 
@@ -190,7 +190,7 @@ Sample response:
 ~~~
 
 
-### PATCH '/movies/<<int:id>>'
+### PATCH '/movies/<int:id>'
 Permission required: `patch:movie`
 - Updates a movie in the database
 - Request arguments: ID (in the route), and A JSON object with at least one of the attributes "title" and "release_date". 
@@ -208,7 +208,7 @@ Sample response:
 }
 ~~~
 
-### DELETE '/actors/<<int:id>>'
+### DELETE '/actors/<int:id>'
 Permission required: `patch:actor`
 - Deletes an actor in the database
 - Request arguments: ID (in the route)
@@ -227,7 +227,7 @@ Sample response:
 }
 ~~~
 
-### DELETE '/movies/<<int:id>>'
+### DELETE '/movies/<int:id>'
 Permission required: `patch:actor`
 - Deletes a movie in the database
 - Request arguments: ID (in the route)
