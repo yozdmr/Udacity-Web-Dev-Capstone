@@ -34,6 +34,217 @@ Once the PIP dependencies are installed and the database has been connected, you
 
 ## Routes
 
+### GET '/'
+Permission required: `none`
+- Displays success in reaching the route
+- Request arguments: None
+- Returns: A JSON object with key "success"
+
+Sample response:
+~~~json
+{
+    "success": true
+}
+~~~
+
+### GET '/actors'
+Permission required: `get:actor`
+- Displays all of the actors in the database
+- Request arguments: None
+- Returns: A JSON object with keys "actors" (which contains all of the actors in the database), "number_actors" and "success"
+
+Sample response:
+~~~json
+{
+    "actors": [
+        {
+            "age": 30,
+            "gender": "Male",
+            "id": 1,
+            "name": "John Doe"
+        }
+    ],
+    "number_actors": 1,
+    "success": true
+}
+~~~
+
+
+### GET '/movies'
+Permission required: `get:movie`
+- Displays all of the movies in the database
+- Request arguments: None
+- Returns: A JSON object with keys "movies" (which contains all of the movies in the database), "number_movies" and "success"
+
+Sample response:
+~~~json
+{
+    "movies": [
+        {
+            "id": 1,
+            "release_date": "Fri, 07 Apr 2023 14:30:15 GMT",
+            "title": "Good Movie"
+        }
+    ],
+    "number_movies": 1,
+    "success": true
+}
+~~~
+
+
+### GET '/actors/<int:id>'
+Permission required: `get:actor`
+- Displays the actor with the specified ID
+- Request arguments: ID (in the route)
+- Returns: A JSON object with keys "actor" (which contains the actor requested), "number_actors" and "success"
+
+Sample response:
+~~~json
+{
+    "actor": {
+        "age": 30,
+        "gender": "Male",
+        "id": 1,
+        "name": "John Doe"
+    },
+    "number_actors": 1,
+    "success": true
+}
+~~~
+
+
+### GET '/movies/<int:id>'
+Permission required: `get:movie`
+- Displays the movie with the specified ID
+- Request arguments: ID (in the route)
+- Returns: A JSON object with keys "movie" (which contains the movie requested), "number_movies" and "success"
+
+Sample response:
+~~~json
+{
+    "movie": {
+        "id": 1,
+        "release_date": "Fri, 07 Apr 2023 14:30:15 GMT",
+        "title": "Good Movie"
+    },
+    "number_movies": 1,
+    "success": true
+}
+~~~
+
+
+### POST '/actors'
+Permission required: `post:actor`
+- Adds an actor to the database
+- Request arguments: A JSON object with attributes "name", "age" and "gender". 
+- Returns: A JSON object with keys "added_actor" (which contains the actor that was added) and "success".
+
+Sample response:
+~~~json
+{
+    "added_actor": {
+        "age": 30,
+        "gender": "Male",
+        "id": 1,
+        "name": "John Doe"
+    },
+    "success": true
+}
+~~~
+
+### POST '/movies'
+Permission required: `post:movie`
+- Adds an actor to the database
+- Request arguments: A JSON object with attributes "title", "release_date". 
+- Returns: A JSON object with keys "added_movie" (which contains the movie that was added) and "success".
+
+Sample response:
+~~~json
+{
+    "added_movie": {
+        "id": 1,
+        "release_date": "Fri, 07 Apr 2023 14:30:15 GMT",
+        "title": "Good Movie"
+    },
+    "success": true
+}
+~~~
+
+### PATCH '/actors/<int:id>'
+Permission required: `patch:actor`
+- Updates an actor in the database
+- Request arguments: ID (in the route), and A JSON object with at least one of the attributes "name", "age" and "gender". 
+- Returns: A JSON object with keys "updated_actor" (which contains the actor that was added) and "success".
+
+Sample response:
+~~~json
+{
+    "success": true,
+    "updated_actor": {
+        "age": 30,
+        "gender": "Modified",
+        "id": 1,
+        "name": "John Doe"
+    }
+}
+~~~
+
+
+### PATCH '/movies/<int:id>'
+Permission required: `patch:movie`
+- Updates a movie in the database
+- Request arguments: ID (in the route), and A JSON object with at least one of the attributes "title" and "release_date". 
+- Returns: A JSON object with keys "updated_movie" (which contains the movie that was updated) and "success".
+
+Sample response:
+~~~json
+{
+    "success": true,
+    "updated_movie": {
+        "id": 1,
+        "release_date": "Fri, 07 Apr 2023 14:30:15 GMT",
+        "title": "Modified Movie"
+    }
+}
+~~~
+
+### DELETE '/actors/<int:id>'
+Permission required: `patch:actor`
+- Deletes an actor in the database
+- Request arguments: ID (in the route)
+- Returns: A JSON object with keys "deleted_actor" (which contains the actor that was deleted) and "success".
+
+Sample response:
+~~~json
+{
+    "deleted_actor": {
+        "age": 30,
+        "gender": "Male",
+        "id": 1,
+        "name": "John Doe"
+    },
+    "success": true
+}
+~~~
+
+### DELETE '/movies/<int:id>'
+Permission required: `patch:actor`
+- Deletes a movie in the database
+- Request arguments: ID (in the route)
+- Returns: A JSON object with keys "deleted_movie" (which contains the movie that was deleted) and "success".
+
+Sample response:
+~~~json
+{
+    "deleted_movie": {
+        "id": 1,
+        "release_date": "Fri, 07 Apr 2023 14:30:15 GMT",
+        "title": "Modified Movie"
+    },
+    "success": true
+}
+~~~
+
 
 ## Authentication
 This application uses Auth0 to run. The Auth0 API Domain and Audience should be stored in a file called `authinfo.env` which should be created by the user. The values should be stored in values called *AUTH0_DOMAIN* and *API_AUDIENCE* respectively.
