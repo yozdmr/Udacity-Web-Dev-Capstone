@@ -80,7 +80,7 @@ def create_app(test_config=None):
         if actor != None and Actor.query.all() != None:
             return {
                 "number_actors": len(Actor.query.all()),
-                "actors": actor.format(),
+                "actor": actor.format(),
                 "success": True
             }
         else:
